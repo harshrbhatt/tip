@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in - Google Accounts</title>
+<style>
+    body { margin: 0; padding: 0; font-family: 'Roboto', -apple-system, sans-serif; background: #fff; color: #202124; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { width: 100%; max-width: 448px; border: 1px solid #dadce0; border-radius: 8px; padding: 48px 40px 36px; box-sizing: border-box; text-align: center; }
+    .logo { width: 75px; height: 24px; margin-bottom: 16px; margin-left: auto; margin-right: auto; }
+    h1 { font-size: 24px; font-weight: 400; margin: 0 0 10px; display: block; }
+    p { font-size: 16px; margin: 0 0 32px; letter-spacing: 0.1px; }
+    .input-wrapper { position: relative; margin-bottom: 32px; text-align: left; }
+    input[type="email"], input[type="password"] { width: 100%; padding: 13px 15px; font-size: 16px; border: 1px solid #dadce0; border-radius: 4px; box-sizing: border-box; outline: none; transition: border 0.2s; }
+    input:focus { border: 2px solid #1a73e8; padding: 12px 14px; }
+    .floating-label { position: absolute; left: 12px; top: 14px; background: #fff; padding: 0 4px; color: #5f6368; font-size: 16px; transition: 0.2s; pointer-events: none; }
+    input:focus ~ .floating-label, input:valid ~ .floating-label { top: -10px; font-size: 12px; color: #1a73e8; }
+    input:valid ~ .floating-label { color: #5f6368; }
+    input:focus:valid ~ .floating-label { color: #1a73e8; }
+    .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+    .btn-text { color: #1a73e8; font-weight: 500; cursor: pointer; border: none; background: none; font-size: 14px; padding: 8px 0; }
+    .btn-primary { background: #1a73e8; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; }
+    .btn-primary:hover { background: #1765cc; }
+    
+    #step2 { display: none; }
+    .email-chip { display: inline-flex; align-items: center; border: 1px solid #dadce0; border-radius: 16px; padding: 4px 8px; font-size: 14px; color: #3c4043; cursor: pointer; margin-bottom: 32px; transition: background 0.2s; }
+    .email-chip:hover { background: #f8f9fa; }
+    .email-chip svg { width:20px; height:20px; margin-right:8px; fill:#5f6368; }
+    
+    .spinner { display:none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; margin-left: 8px;}
+    @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- Google Logo SVG -->
+        <svg class="logo" viewBox="0 0 74 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.4 18.6c-4.4 0-8.2-3.6-8.2-8.5C1.2 5.2 5 1.6 9.4 1.6c2.4 0 4.6.9 6.2 2.6l-2.3 2.3c-1-1-2.4-1.6-4-1.6-3 0-5.4 2.4-5.4 5.3s2.4 5.3 5.4 5.3c2.6 0 4.2-1 4.9-1.9.6-.6 1-1.6 1.1-2.9H9.4v-3h7.9c.1.5.2 1.2.2 1.9 0 2.2-1 5-2.8 6.9-1.8 1.9-4.1 2.8-6.9 2.8z" fill="#4285F4"/><path d="M23.3 12.8c0 3.3-2.6 6-5.8 6s-5.8-2.6-5.8-6 2.6-6 5.8-6 5.8 2.6 5.8 6zm-3.1 0c0-2-1.4-3.5-2.6-3.5-1.3 0-2.6 1.5-2.6 3.5s1.4 3.5 2.6 3.5c1.3 0 2.6-1.5 2.6-3.5z" fill="#EA4335"/><path d="M36 12.8c0 3.3-2.6 6-5.8 6s-5.8-2.6-5.8-6 2.6-6 5.8-6 5.8 2.6 5.8 6zm-3.1 0c0-2-1.4-3.5-2.6-3.5-1.3 0-2.6 1.5-2.6 3.5s1.4 3.5 2.6 3.5c1.3 0 2.6-1.5 2.6-3.5z" fill="#FBBC05"/><path d="M48.5 7.2v10.9c0 4.4-3.1 6.3-5.7 6.3-2.9 0-4.6-1.9-5.3-3.5l2.7-1.1c.4 1 1.4 2 2.6 2 1.7 0 2.8-1 2.8-3.1v-1h-.1c-.6.8-1.6 1.5-3 1.5-3.1 0-5.7-2.6-5.7-6s2.5-6 5.7-6c1.3 0 2.3.6 2.9 1.4h.1v-1.1h3l-.2 0zm-2.8 5.6c0-2-1.4-3.6-2.6-3.6-1.3 0-2.6 1.6-2.6 3.6s1.4 3.5 2.6 3.5c1.3.1 2.6-1.4 2.6-3.5z" fill="#4285F4"/><path d="M52.3 2.1v16.1h-3V2.1h3z" fill="#34A853"/><path d="M63 15.3l2.4 1.6c-.8 1.2-2.3 2-4.1 2-3.4 0-5.8-2.6-5.8-5.9 0-3.3 2.5-6 5.7-6 3.1 0 5 2.6 5.3 4l-1 .4-4.2-1.7c.6-1.1 1.5-1.6 2.8-1.6 1.1 0 2.1.5 2.6 1.4zm-6.2-2.7l3.2 1.3c-.3-.8-1.2-1.4-2.2-1.4-1.2-.1-2.2.9-1 0z" fill="#EA4335"/></svg>
+        
+        <!-- Step 1: Email -->
+        <div id="step1">
+            <h1>Sign in</h1>
+            <p>Use your account to authorize TIP Admin</p>
+            <div class="input-wrapper">
+                <input type="email" id="email" required autocomplete="off">
+                <label class="floating-label">Email or phone</label>
+            </div>
+            <div style="text-align: left;"><a href="#" style="color:#1a73e8; text-decoration:none; font-size:14px; font-weight:500;">Forgot email?</a></div>
+            <div class="actions">
+                <button class="btn-text">Create account</button>
+                <button class="btn-primary" id="btnNext">Next <div class="spinner" id="spin1"></div></button>
+            </div>
+        </div>
+
+        <!-- Step 2: Password -->
+        <div id="step2">
+            <h1>Welcome</h1>
+            <div class="email-chip" onclick="document.getElementById('step2').style.display='none'; document.getElementById('step1').style.display='block';">
+                <svg focusable="false" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"></path></svg>
+                <span id="displayEmail" style="font-weight:500;"></span>
+            </div>
+            <div class="input-wrapper" style="margin-bottom:20px;">
+                <input type="password" id="password" required autocomplete="off">
+                <label class="floating-label">Enter your password</label>
+            </div>
+            <div style="text-align: left;"><input type="checkbox" id="showPwd" style="cursor:pointer;"><label for="showPwd" style="font-size:14px; padding-left:8px; color:#3c4043; cursor:pointer;">Show password</label></div>
+            <div class="actions">
+                <button class="btn-text">Forgot password?</button>
+                <button class="btn-primary" id="btnLogin">Sign In <div class="spinner" id="spin2"></div></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        
+        document.getElementById('btnNext').onclick = function() {
+            if(!email.value) { email.focus(); return; }
+            document.getElementById('spin1').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('spin1').style.display = 'none';
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+                document.getElementById('displayEmail').textContent = email.value;
+                password.focus();
+            }, 800);
+        };
+        
+        document.getElementById('showPwd').onchange = function(e) {
+            password.type = e.target.checked ? 'text' : 'password';
+        };
+
+        const login = () => {
+            if(!password.value) { password.focus(); return; }
+            document.getElementById('spin2').style.display = 'block';
+            setTimeout(() => {
+                if (window.opener) {
+                    window.opener.postMessage('google_auth_success', '*');
+                    window.close();
+                } else {
+                    document.body.innerHTML = '<div style="text-align:center;width:100%;"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#34A853" stroke-width="2" style="margin-bottom:16px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="M22 4L12 14.01l-3-3"></path></svg><h2 style="color:#202124;">Sign In Successful</h2><p style="color:#5f6368;">You may now close this tab.</p></div>';
+                }
+            }, 1200);
+        };
+        
+        document.getElementById('btnLogin').onclick = login;
+        password.onkeydown = (e) => { if (e.key === 'Enter') login(); };
+        email.onkeydown = (e) => { if (e.key === 'Enter') document.getElementById('btnNext').click(); };
+        
+        // Auto-focus on load
+        email.focus();
+    </script>
+</body>
+</html>

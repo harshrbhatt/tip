@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+    <!-- 
+      TELECOM INTELLIGENCE PLATFORM (TIP)
+      Database Schema Definition (PostgreSQL / Supabase compatible) 
+    -->
+
+    <changeSet id="tip-01-schema" author="system">
+        
+        <!-- Table: telecom_users (Admin & Roles extension for Auth) -->
+        <createTable tableName="telecom_users">
+            <column name="id" type="uuid" valueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="role" type="varchar(50)" defaultValue="viewer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_login" type="timestamp"/>
+        </createTable>
+
+        <!-- Table: telecom_metrics (Primary Insights Data) -->
+        <createTable tableName="telecom_metrics">
+            <column name="id" type="uuid" valueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="uploader_id" type="uuid">
+                <constraints foreignKeyName="fk_metrics_user" referencedTableName="telecom_users" referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="network_type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="signal_strength" type="decimal(10,2)"/>
+            <column name="call_drop_rate" type="decimal(5,2)"/>
+            <column name="latency_ms" type="int"/>
+            <column name="recorded_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Table: llm_queries (History of AI usage on the dashboard) -->
+        <createTable tableName="llm_queries">
+            <column name="id" type="uuid" valueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="uuid">
+                <constraints foreignKeyName="fk_query_user" referencedTableName="telecom_users" referencedColumnNames="id" nullable="false"/>
+            </column>
+            <column name="prompt" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="response" type="text"/>
+            <column name="query_duration_ms" type="int"/>
+            <column name="timestamp" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

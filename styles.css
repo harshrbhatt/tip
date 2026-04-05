@@ -66,6 +66,55 @@
     --sidebar-width: 240px;
 }
 
+/* ---- Material You Expressive Dark Theme ---- */
+[data-theme="dark"] {
+    /* Primary vibrant palette shifted for dark mode */
+    --primary-50: #1C2B4B;
+    --primary-100: #253965;
+    --primary-200: #334F8C;
+    --primary-300: #4B70BA;
+    --primary-400: #6B96F7;
+    --primary-500: #84ABFF;
+    --primary-600: #ADC8FF;
+    --primary-700: #D6E4FF;
+
+    /* Accents adapted for dark surfaces */
+    --accent-purple: #958EFF;
+    --accent-coral: #FF8F8C;
+    --accent-teal: #4ADEBB;
+    --accent-amber: #FFBF5A;
+
+    /* Neutrals inverted based on Material 3 tonal palettes */
+    --gray-25: #0F1014;
+    --gray-50: #131418;
+    --gray-100: #1B1D22;
+    --gray-200: #252830;
+    --gray-300: #343844;
+    --gray-400: #555A6B;
+    --gray-500: #888E9F;
+    --gray-600: #B2B8C6;
+    --gray-700: #DFE2EA;
+    --gray-800: #F3F4F8;
+    --gray-900: #FFFFFF;
+
+    /* Expressive Surfaces */
+    --surface-bg: #0B0D11;
+    --surface-card: #15171D;
+    --surface-sidebar: #0F1116;
+
+    /* Deepened Shadows */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.6), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);
+    --shadow-xl: 0 20px 40px -8px rgba(0, 0, 0, 0.7);
+}
+
+/* Global Transition to make dark mode shifting smooth across site */
+body, .sidebar, .metric-card, .chart-card, .chat-container, .file-item, .insight-item, .editor-table-wrap, header, .date-badge, button {
+    transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-out), border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out) !important;
+}
+
 /* ---- Reset ---- */
 *, *::before, *::after {
     margin: 0;
@@ -199,6 +248,36 @@ body {
 .sidebar-footer {
     padding: 16px 16px 20px;
     border-top: 1px solid var(--gray-100);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    background: var(--surface-bg);
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    color: var(--primary-500);
+    border-color: var(--primary-300);
+    background: var(--primary-50);
+}
+
+.theme-toggle svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }
 
 .sidebar-user {

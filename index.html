@@ -13,6 +13,64 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+    <!-- First SSO Screen (Default State) -->
+    <div id="supabaseLoginScreen" style="position:fixed; top:0; left:0; width:100%; height:100vh; background:#FFFFFF; z-index:9999; display:flex; justify-content:center; align-items:center;">
+        
+        <!-- SIGN IN BOX (DEFAULT) -->
+        <div id="signInBox" style="width: 100%; max-width: 448px; border: 1px solid #dadce0; border-radius: 8px; padding: 48px 40px 36px; box-sizing: border-box; text-align: center; font-family: 'Inter', sans-serif;">
+            <svg style="width: 48px; height: 48px; margin-bottom: 16px; margin-left: auto; margin-right: auto; display: block;" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="14" r="13" stroke="url(#brandGradLogin)" stroke-width="2"/>
+                <path d="M9 14.5L12.5 18L19 10" stroke="url(#brandGradLogin)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="brandGradLogin" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#6C63FF"/></linearGradient></defs>
+            </svg>
+            <h1 style="font-size: 24px; font-weight: 600; margin: 0 0 8px; display: block; color:#202124;">TIP SSO</h1>
+            <p style="font-size: 15px; margin: 0 0 32px; letter-spacing: 0.1px; color:#5f6368;">Sign in to Telecom Intelligence Platform</p>
+            
+            <form id="emailAuthForm" style="display:flex; flex-direction:column; gap:16px; margin-bottom: 24px;">
+                <input type="email" id="authEmail" placeholder="Email address" style="width:100%; padding:12px; border:1px solid #dadce0; border-radius:4px; font-size:15px; box-sizing:border-box; font-family:'Inter', sans-serif;" required/>
+                <input type="password" id="authPassword" placeholder="Password" style="width:100%; padding:12px; border:1px solid #dadce0; border-radius:4px; font-size:15px; box-sizing:border-box; font-family:'Inter', sans-serif;" required/>
+                <button type="submit" id="emailLoginBtn" style="margin-top:8px; width:100%; background:#1a73e8; color:#fff; border:none; border-radius:4px; padding:12px 16px; font-weight:500; font-family:'Inter', sans-serif; cursor:pointer; font-size:15px; transition:all 0.2s; box-shadow:0 1px 2px 0 rgba(60,64,67,0.3);">Sign in</button>
+            </form>
+
+            <p style="font-size:14px; color:#5f6368; margin-bottom:24px;">Don't have an account? <span id="showSignupBtn" style="color:#1a73e8; cursor:pointer; font-weight:500;">Create one</span></p>
+
+            <div style="display:flex; align-items:center; margin-bottom: 24px; color:#5f6368; font-size:14px;">
+                <div style="flex:1; height:1px; background:#dadce0;"></div>
+                <span style="padding:0 12px;">OR</span>
+                <div style="flex:1; height:1px; background:#dadce0;"></div>
+            </div>
+
+            <button id="spLoginBtn" style="display:flex; align-items:center; justify-content:center; gap:12px; width:100%; background:#fff; color:#3c4043; border:1px solid #dadce0; border-radius:4px; padding:10px 24px; font-weight:500; font-family:'Inter', sans-serif; cursor:pointer; font-size:14px; box-shadow:0 1px 2px 0 rgba(60,64,67,0.1); transition:all 0.2s;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#fff"/><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+            <div id="spLoginError" style="color:#d93025; font-size:13px; margin-top:16px; display:none; text-align:left; padding:8px; background:#fce8e6; border-radius:4px;"></div>
+        </div>
+
+        <!-- SIGN UP BOX (HIDDEN) -->
+        <div id="signUpBox" style="display:none; width: 100%; max-width: 448px; border: 1px solid #dadce0; border-radius: 8px; padding: 48px 40px 36px; box-sizing: border-box; text-align: center; font-family: 'Inter', sans-serif;">
+            <svg style="width: 48px; height: 48px; margin-bottom: 16px; margin-left: auto; margin-right: auto; display: block;" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="14" r="13" stroke="url(#brandGradReq)" stroke-width="2"/>
+                <path d="M9 14.5L12.5 18L19 10" stroke="url(#brandGradReq)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="brandGradReq" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#6C63FF"/></linearGradient></defs>
+            </svg>
+            <h1 style="font-size: 24px; font-weight: 600; margin: 0 0 8px; display: block; color:#202124;">Create an account</h1>
+            <p style="font-size: 15px; margin: 0 0 32px; letter-spacing: 0.1px; color:#5f6368;">Join the Telecom Intelligence Platform</p>
+            
+            <form id="emailSignupForm" style="display:flex; flex-direction:column; gap:16px; margin-bottom: 24px;">
+                <input type="text" id="regName" placeholder="Full Name" style="width:100%; padding:12px; border:1px solid #dadce0; border-radius:4px; font-size:15px; box-sizing:border-box; font-family:'Inter', sans-serif;" required/>
+                <input type="email" id="regEmail" placeholder="Email address" style="width:100%; padding:12px; border:1px solid #dadce0; border-radius:4px; font-size:15px; box-sizing:border-box; font-family:'Inter', sans-serif;" required/>
+                <input type="password" id="regPassword" placeholder="Create Password" style="width:100%; padding:12px; border:1px solid #dadce0; border-radius:4px; font-size:15px; box-sizing:border-box; font-family:'Inter', sans-serif;" required/>
+                <button type="submit" id="finalSignupBtn" style="margin-top:8px; width:100%; background:#1a73e8; color:#fff; border:none; border-radius:4px; padding:12px 16px; font-weight:500; font-family:'Inter', sans-serif; cursor:pointer; font-size:15px; transition:all 0.2s; box-shadow:0 1px 2px 0 rgba(60,64,67,0.3);">Create account</button>
+            </form>
+
+            <p style="font-size:14px; color:#5f6368; margin-bottom:8px;">Already have an account? <span id="showSigninBtn" style="color:#1a73e8; cursor:pointer; font-weight:500;">Sign in instead</span></p>
+            <div id="spSignupError" style="color:#d93025; font-size:13px; margin-top:16px; display:none; text-align:left; padding:8px; background:#fce8e6; border-radius:4px;"></div>
+        </div>
+    </div>
+
+    <!-- Dashboard App (Revealed after auth) -->
+    <div id="tipDashboardApp" style="display: none; width: 100%; height: 100vh;">
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
@@ -73,6 +131,10 @@
                     <span class="user-role">Admin</span>
                 </div>
             </div>
+            <button class="theme-toggle" id="themeToggle" title="Switch Theme">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="4.22" x2="19.78" y2="5.64"/></svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
         </div>
     </aside>
 
@@ -589,6 +651,7 @@
             </div>
         </section>
     </main>
+    </div> <!-- /tipDashboardApp -->
 
     <!-- Fullscreen Chart Modal -->
     <div class="fullscreen-modal" id="fullscreenModal" style="display:none;">
@@ -631,6 +694,28 @@
             </div>
         </div>
     </div>
+    <!-- Admin Auth Modal -->
+    <div class="modal-overlay" id="adminAuthModal" style="display:none;">
+        <div class="modal-card" style="max-width:360px; text-align:center;">
+            <div class="modal-header" style="justify-content:center; border-bottom:none; padding-bottom:0;">
+                <button class="modal-close" id="closeAuthModal" style="position:absolute; right:16px; top:16px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 10px 24px 32px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary-500)" stroke-width="2" style="margin-bottom:16px;">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                </svg>
+                <h3 style="font-size:1.125rem; font-weight:700; margin-bottom:8px; color:var(--gray-800);">Admin Access Required</h3>
+                <p style="font-size:0.8125rem; color:var(--gray-600); margin-bottom:24px;">You must sign in with an authorized Google Workspace administrator account to configure global LLM parameters.</p>
+                <button id="googleAuthBtn" style="display:flex; align-items:center; justify-content:center; gap:12px; width:100%; background:#fff; color:#3c4043; border:1px solid #dadce0; border-radius:4px; padding:10px 16px; font-weight:500; font-family:var(--font-family); cursor:pointer; font-size:0.875rem; box-shadow:0 1px 2px 0 rgba(60,64,67,0.3); transition:all 0.2s;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Continue with Google
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Sheet Data Viewer Modal -->
     <div class="sheet-viewer-overlay" id="sheetViewer" style="display:none;">
         <div class="sheet-viewer">
@@ -656,6 +741,6 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="./app.js"></script>
 </body>
 </html>

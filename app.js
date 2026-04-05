@@ -3,6 +3,8 @@
    Application Logic v3 — Zero Defaults, 
    Real-time Dashboard, LLM Integration
    ============================================ */
+import { initSupabaseAuth } from './src/auth.js';
+
 
 (() => {
     'use strict';
@@ -749,7 +751,43 @@
         const keyInput = $('#apiKeyInput');
         const providerSelect = $('#llmProviderSelect');
 
+        const authModal = $('#adminAuthModal');
+        const googleAuthBtn = $('#googleAuthBtn');
+        const closeAuthBtn = $('#closeAuthModal');
+        
+        if (closeAuthBtn) closeAuthBtn.addEventListener('click', () => { if (authModal) authModal.style.display = 'none'; });
+        if (authModal) authModal.addEventListener('click', (e) => { if (e.target === authModal) authModal.style.display = 'none'; });
+        
+        if (googleAuthBtn) googleAuthBtn.addEventListener('click', () => {
+            // Open the simulated SSO popup page
+            const w = 450;
+            const h = 600;
+            const left = (window.screen.width / 2) - (w / 2);
+            const top = (window.screen.height / 2) - (h / 2);
+            const ssoPopup = window.open('sso.html', 'Google Sign In', `width=${w},height=${h},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=no,resizable=no`);
+            
+            // Listen for the cross-window message from sso.html
+            const authListener = (event) => {
+                if (event.data === 'google_auth_success') {
+                    // Success! Grant admin privileges
+                    sessionStorage.setItem('tip_admin_auth', 'true');
+                    if (authModal) authModal.style.display = 'none';
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        keyInput.value = state.llmApiKey;
+                        providerSelect.value = state.llmProvider;
+                    }
+                    window.removeEventListener('message', authListener);
+                }
+            };
+            window.addEventListener('message', authListener);
+        });
+
         if (settingsBtn) settingsBtn.addEventListener('click', () => {
+            if (sessionStorage.getItem('tip_admin_auth') !== 'true') {
+                if (authModal) authModal.style.display = 'flex';
+                return;
+            }
             modal.style.display = 'flex';
             keyInput.value = state.llmApiKey;
             providerSelect.value = state.llmProvider;
@@ -1791,8 +1829,55 @@ Types can be: success, warning, danger, or empty string. No markdown, no explana
         }
     });
 
+    // ---- Theme & Material You Expressive Dark Mode ----
+    function initTheme() {
+        const toggleBtn = $('#themeToggle');
+        if (!toggleBtn) return;
+        const sun = toggleBtn.querySelector('.sun-icon');
+        const moon = toggleBtn.querySelector('.moon-icon');
+        
+        const setTheme = (isDark) => {
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('tip_theme', isDark ? 'dark' : 'light');
+            if (sun && moon) {
+                sun.style.display = isDark ? 'none' : 'block';
+                moon.style.display = isDark ? 'block' : 'none';
+            }
+            
+            // Material You Expressive Charts Adaptation
+            Chart.defaults.color = isDark ? '#B2B8C6' : '#6B7280';
+            Chart.defaults.scale.grid.color = isDark ? '#252830' : '#F1F3F9';
+            if (state.charts) {
+                Object.values(state.charts).forEach(chart => {
+                    if (chart) {
+                        if (chart.options.plugins.tooltip) {
+                            chart.options.plugins.tooltip.backgroundColor = isDark ? '#1B1D22' : '#1F2937';
+                            chart.options.plugins.tooltip.titleColor = isDark ? '#FFFFFF' : '#FFFFFF';
+                        }
+                        chart.update();
+                    }
+                });
+            }
+        };
+
+        // Initialize state based on localStorage or OS Preference
+        const saved = localStorage.getItem('tip_theme');
+        if (saved) {
+            setTheme(saved === 'dark');
+        } else {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            setTheme(prefersDark);
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            const isCurrentlyDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            setTheme(!isCurrentlyDark);
+        });
+    }
+
     // ---- Initialize ----
     function init() {
+        initTheme();
         initNav();
         setDate();
         initUpload();
@@ -1806,5 +1891,15 @@ Types can be: success, warning, danger, or empty string. No markdown, no explana
         initEditor();
     }
 
-    document.addEventListener('DOMContentLoaded', init);
+    // ============================================
+    // INIT GATEWAY
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+        initSupabaseAuth(() => {
+            if (!window.__tipAppReady) {
+                init();
+                window.__tipAppReady = true;
+            }
+        });
+    });
 })();
