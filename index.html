@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIP — Telecom Intelligence Platform</title>
+    <meta name="description" content="AI-powered Telecom Intelligence Platform for data-driven insights, analytics, and recommendations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="14" cy="14" r="13" stroke="url(#brandGrad)" stroke-width="2"/>
+                    <path d="M9 14.5L12.5 18L19 10" stroke="url(#brandGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs><linearGradient id="brandGrad" x1="0" y1="0" x2="28" y2="28"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#6C63FF"/></linearGradient></defs>
+                </svg>
+            </div>
+            <span class="brand-name">TIP</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-screen="upload" id="nav-upload">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <span>Upload</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="dashboard" id="nav-dashboard">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="chat" id="nav-chat">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                </svg>
+                <span>AI Chat</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="recommendations" id="nav-recommendations">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>Insights</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="history" id="nav-history">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>History</span>
+            </a>
+            <a href="#" class="nav-item" data-screen="editor" id="nav-editor">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/>
+                </svg>
+                <span>Data Editor</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="user-avatar">HB</div>
+                <div class="user-info">
+                    <span class="user-name">Harsh Bhatt</span>
+                    <span class="user-role">Admin</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ==================== UPLOAD SCREEN ==================== -->
+        <section class="screen active" id="screen-upload">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">Upload Data</h1>
+                    <p class="screen-subtitle">Import your telecom datasets to unlock AI-powered insights</p>
+                </div>
+            </header>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-dropzone" id="dropzone">
+                    <div class="dropzone-icon">
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                            <rect x="8" y="8" width="48" height="48" rx="12" stroke="#4F8EF7" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
+                            <path d="M32 22V42M32 22L24 30M32 22L40 30" stroke="#4F8EF7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="dropzone-title">Drag & drop files here</h3>
+                    <p class="dropzone-text">or click to browse from your computer</p>
+                    <p class="dropzone-hint">Supports .xlsx, .xls, and .csv files</p>
+                    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv" hidden>
+                </div>
+
+                <div class="upload-file-list" id="fileList">
+                    <!-- File items rendered by JS -->
+                </div>
+
+                <button class="btn btn-primary btn-lg upload-proceed" id="proceedBtn" style="display:none;">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Generate Insights
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== DASHBOARD SCREEN ==================== -->
+        <section class="screen" id="screen-dashboard">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">Dashboard</h1>
+                    <p class="screen-subtitle">Real-time telecom analytics & AI-generated insights</p>
+                </div>
+                <div class="header-actions">
+                    <div class="date-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+            </header>
+            <!-- Global Dashboard Filters -->
+            <div class="global-filter-bar" id="globalFilterBar">
+                <div class="filter-group">
+                    <label class="filter-label">Period</label>
+                    <div class="filter-chips">
+                        <button class="chip active" data-period="all">All</button>
+                        <button class="chip" data-period="3">3M</button>
+                        <button class="chip" data-period="6">6M</button>
+                        <button class="chip" data-period="12">1Y</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Region</label>
+                    <select class="filter-select" id="regionFilterSelect"><option value="all">All Regions</option></select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Segment</label>
+                    <select class="filter-select" id="planFilterSelect"><option value="all">All Plans</option></select>
+                </div>
+                <button class="filter-reset-btn" id="filterResetBtn">↺ Reset</button>
+            </div>
+
+            <!-- Metric Cards -->
+            <div class="metrics-grid">
+                <div class="metric-card has-tooltip" id="metric-revenue" data-tooltip="Sum of all revenue from uploaded data">
+                    <div class="metric-icon metric-icon-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    </div>
+                    <div class="metric-body">
+                        <span class="metric-label">Total Revenue <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                        <span class="metric-value" id="metricRevenue">₹0</span>
+                        <span class="metric-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +12.4%</span>
+                    </div>
+                </div>
+                <div class="metric-card has-tooltip" id="metric-users" data-tooltip="Total active users across all plans">
+                    <div class="metric-icon metric-icon-purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <div class="metric-body">
+                        <span class="metric-label">Total Subscribers <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                        <span class="metric-value" id="metricUsers">0</span>
+                        <span class="metric-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +8.2%</span>
+                    </div>
+                </div>
+                <div class="metric-card has-tooltip" id="metric-churn" data-tooltip="% of users leaving the network. Lower is better">
+                    <div class="metric-icon metric-icon-coral">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div class="metric-body">
+                        <span class="metric-label">Churn Rate <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                        <span class="metric-value" id="metricChurn">0%</span>
+                        <span class="metric-change negative"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg> -2.1%</span>
+                    </div>
+                </div>
+                <div class="metric-card has-tooltip" id="metric-arpu" data-tooltip="Avg revenue per user. Higher = better monetization">
+                    <div class="metric-icon metric-icon-teal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+                    </div>
+                    <div class="metric-body">
+                        <span class="metric-label">ARPU <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                        <span class="metric-value" id="metricARPU">₹0</span>
+                        <span class="metric-change positive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +5.7%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row 1 -->
+            <div class="charts-grid">
+                <div class="chart-card chart-card-wide" draggable="true" data-chart-id="revenue">
+                    <div class="card-header">
+                        <h3 class="card-title">Revenue Trend</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="revenueChart">
+                                <button class="ctype-btn active" data-type="line" title="Line">📈</button>
+                                <button class="ctype-btn" data-type="bar" title="Bar">📊</button>
+                                <button class="ctype-btn" data-type="area" title="Area">🌊</button>
+                            </div>
+                            <button class="chip active" data-range="6m">6M</button>
+                            <button class="chip" data-range="1y">1Y</button>
+                            <button class="chip" data-range="all">All</button>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('revenueChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('revenueChart','Revenue Trend')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="revenueChart"></canvas></div>
+                </div>
+                <div class="chart-card" draggable="true" data-chart-id="segment">
+                    <div class="card-header">
+                        <h3 class="card-title">User Segmentation</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="segmentChart">
+                                <button class="ctype-btn active" data-type="doughnut" title="Donut">🍩</button>
+                                <button class="ctype-btn" data-type="pie" title="Pie">🥧</button>
+                                <button class="ctype-btn" data-type="bar" title="Bar">📊</button>
+                                <button class="ctype-btn" data-type="radar" title="Radar">🕸</button>
+                            </div>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('segmentChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('segmentChart','User Segmentation')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper chart-wrapper-donut"><canvas id="segmentChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 2 -->
+            <div class="charts-grid">
+                <div class="chart-card" draggable="true" data-chart-id="region">
+                    <div class="card-header">
+                        <h3 class="card-title">Region Performance</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="regionChart">
+                                <button class="ctype-btn active" data-type="bar" title="Bar">📊</button>
+                                <button class="ctype-btn" data-type="horizontalBar" title="H-Bar">↔</button>
+                                <button class="ctype-btn" data-type="radar" title="Radar">🕸</button>
+                                <button class="ctype-btn" data-type="polarArea" title="Polar">◎</button>
+                            </div>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('regionChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('regionChart','Region Performance')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="regionChart"></canvas></div>
+                </div>
+                <div class="chart-card" draggable="true" data-chart-id="arpu">
+                    <div class="card-header">
+                        <h3 class="card-title">ARPU Trend</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="arpuChart">
+                                <button class="ctype-btn active" data-type="line" title="Line">📈</button>
+                                <button class="ctype-btn" data-type="bar" title="Bar">📊</button>
+                            </div>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('arpuChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('arpuChart','ARPU Trend')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="arpuChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 3 -->
+            <div class="charts-grid">
+                <div class="chart-card" draggable="true" data-chart-id="churnheat">
+                    <div class="card-header">
+                        <h3 class="card-title">Churn by Region</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="churnHeatChart">
+                                <button class="ctype-btn active" data-type="bar" title="Bar">📊</button>
+                                <button class="ctype-btn" data-type="radar" title="Radar">🕸</button>
+                            </div>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('churnHeatChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('churnHeatChart','Churn by Region')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="churnHeatChart"></canvas></div>
+                </div>
+                <div class="chart-card" draggable="true" data-chart-id="scatter">
+                    <div class="card-header">
+                        <h3 class="card-title">Revenue vs Churn</h3>
+                        <div class="card-actions">
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('scatterChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('scatterChart','Revenue vs Churn')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="scatterChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Row 4: Insights -->
+            <div class="charts-grid">
+                <div class="chart-card" draggable="true" data-chart-id="planrev">
+                    <div class="card-header">
+                        <h3 class="card-title">Plan Revenue Split</h3>
+                        <div class="card-actions">
+                            <div class="chart-type-btns" data-target="planRevChart">
+                                <button class="ctype-btn active" data-type="bar" title="Bar">📊</button>
+                                <button class="ctype-btn" data-type="doughnut" title="Donut">🍩</button>
+                                <button class="ctype-btn" data-type="polarArea" title="Polar">◎</button>
+                            </div>
+                            <button class="chart-action-btn" onclick="window.TIP.downloadChart('planRevChart')" title="Download PNG">⬇</button>
+                            <button class="chart-action-btn" onclick="window.TIP.fullscreenChart('planRevChart','Plan Revenue Split')" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper"><canvas id="planRevChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="card-header">
+                        <h3 class="card-title">AI-Generated Insights</h3>
+                        <div class="card-actions">
+                            <span class="ai-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                Powered by AI
+                            </span>
+                            <button class="chart-action-btn" id="refreshInsightsBtn" title="Refresh AI Insights">↺</button>
+                        </div>
+                    </div>
+                    <div class="insights-list" id="insightsList">
+                        <!-- Insights rendered by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== AI CHAT SCREEN ==================== -->
+        <section class="screen" id="screen-chat">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">AI Assistant</h1>
+                    <p class="screen-subtitle">Ask anything about your telecom data</p>
+                </div>
+                <div class="header-actions">
+                    <div id="apiStatus" style="display:none; font-size:0.75rem; font-weight:500; padding:6px 14px; border-radius:20px; background:#E6FAF4; color:#178A63;"></div>
+                    <button class="btn-api-settings" id="apiSettingsBtn" title="Configure LLM API Key">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                        LLM Settings
+                    </button>
+                </div>
+            </header>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-welcome">
+                        <div class="chat-welcome-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="22" stroke="url(#chatGrad)" stroke-width="2"/>
+                                <path d="M16 20h16M16 28h10" stroke="url(#chatGrad)" stroke-width="2" stroke-linecap="round"/>
+                                <defs><linearGradient id="chatGrad" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#4F8EF7"/><stop offset="1" stop-color="#6C63FF"/></linearGradient></defs>
+                            </svg>
+                        </div>
+                        <h2>Hi, I'm your TIP AI Assistant</h2>
+                        <p>I can analyze your telecom data and answer questions about revenue, subscribers, churn, and more.</p>
+                        <div class="chat-suggestions" id="chatSuggestions">
+                            <button class="suggestion-chip" data-question="What is the current churn rate and how can we reduce it?">📉 Analyze churn rate</button>
+                            <button class="suggestion-chip" data-question="Which region generates the highest revenue?">🗺️ Top revenue regions</button>
+                            <button class="suggestion-chip" data-question="Show me revenue trends for the last 6 months">📊 Revenue trends</button>
+                            <button class="suggestion-chip" data-question="What percentage of users are on prepaid vs postpaid plans?">📱 User segmentation</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                        <textarea class="chat-input" id="chatInput" placeholder="Ask about your telecom data..." rows="1"></textarea>
+                        <button class="chat-send-btn" id="chatSendBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="chat-disclaimer">TIP AI generates responses based on your uploaded data. Always verify critical business decisions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== RECOMMENDATIONS SCREEN ==================== -->
+        <section class="screen" id="screen-recommendations">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">AI Recommendations</h1>
+                    <p class="screen-subtitle">Actionable insights to optimize your telecom operations</p>
+                </div>
+            </header>
+
+            <div class="reco-summary-bar">
+                <div class="reco-stat">
+                    <span class="reco-stat-value" id="recoTotal">8</span>
+                    <span class="reco-stat-label">Total Suggestions</span>
+                </div>
+                <div class="reco-stat">
+                    <span class="reco-stat-value reco-high" id="recoHigh">3</span>
+                    <span class="reco-stat-label">High Priority</span>
+                </div>
+                <div class="reco-stat">
+                    <span class="reco-stat-value reco-medium" id="recoMedium">3</span>
+                    <span class="reco-stat-label">Medium Priority</span>
+                </div>
+                <div class="reco-stat">
+                    <span class="reco-stat-value reco-low" id="recoLow">2</span>
+                    <span class="reco-stat-label">Low Priority</span>
+                </div>
+            </div>
+
+            <div class="reco-filters">
+                <button class="chip active" data-filter="all">All</button>
+                <button class="chip" data-filter="high">🔴 High</button>
+                <button class="chip" data-filter="medium">🟡 Medium</button>
+                <button class="chip" data-filter="low">🟢 Low</button>
+            </div>
+
+            <div class="reco-grid" id="recoGrid">
+                <!-- Recommendation cards rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ==================== HISTORY SCREEN ==================== -->
+        <section class="screen" id="screen-history">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">History</h1>
+                    <p class="screen-subtitle">Your recent uploads and analysis sessions</p>
+                </div>
+                <div class="header-actions history-actions">
+                    <div class="history-filter-chips">
+                        <button class="chip active" data-history-filter="all">All</button>
+                        <button class="chip" data-history-filter="2">Last 2 Days</button>
+                        <button class="chip" data-history-filter="3">Last 3 Days</button>
+                    </div>
+                    <button class="btn-clear-history" id="clearHistoryBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        Clear All
+                    </button>
+                </div>
+            </header>
+
+            <!-- Stats overview -->
+            <div class="history-stats">
+                <div class="history-stat-card">
+                    <div class="history-stat-icon history-stat-blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="history-stat-body">
+                        <span class="history-stat-value" id="histTotalFiles">0</span>
+                        <span class="history-stat-label">Files Uploaded</span>
+                    </div>
+                </div>
+                <div class="history-stat-card">
+                    <div class="history-stat-icon history-stat-purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    </div>
+                    <div class="history-stat-body">
+                        <span class="history-stat-value" id="histTotalSessions">0</span>
+                        <span class="history-stat-label">Analysis Sessions</span>
+                    </div>
+                </div>
+                <div class="history-stat-card">
+                    <div class="history-stat-icon history-stat-teal">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <div class="history-stat-body">
+                        <span class="history-stat-value" id="histTotalChats">0</span>
+                        <span class="history-stat-label">AI Queries</span>
+                    </div>
+                </div>
+                <div class="history-stat-card">
+                    <div class="history-stat-icon history-stat-coral">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </div>
+                    <div class="history-stat-body">
+                        <span class="history-stat-value" id="histTotalRows">0</span>
+                        <span class="history-stat-label">Rows Analyzed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent uploads -->
+            <div class="history-section">
+                <h3 class="history-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    Recent Uploads
+                </h3>
+                <div class="history-list" id="historyUploadList">
+                    <div class="history-empty" id="historyUploadsEmpty">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#CDD3E0" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <p>No files uploaded yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity timeline -->
+            <div class="history-section">
+                <h3 class="history-section-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Activity Timeline
+                </h3>
+                <div class="history-timeline" id="historyTimeline">
+                    <div class="history-empty" id="historyTimelineEmpty">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#CDD3E0" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <p>No activity yet — upload a file to begin</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== DATA EDITOR SCREEN ==================== -->
+        <section class="screen" id="screen-editor">
+            <header class="screen-header">
+                <div>
+                    <h1 class="screen-title">Data Editor</h1>
+                    <p class="screen-subtitle">Clean, refine, and reshape your data — Power BI style</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="applyEditorBtn" style="padding:8px 18px;font-size:0.8125rem;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 4 12 14.01 9 11.01"/><path d="M22 4L12 14.01l-3-3L22 4z"/><path d="M3 20h18"/></svg>
+                        Apply to Dashboard
+                    </button>
+                </div>
+            </header>
+
+            <div class="editor-layout">
+                <!-- Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="editor-toolbar-group">
+                        <button class="editor-btn" id="editorAddRow" title="Add Row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Row</button>
+                        <button class="editor-btn" id="editorAddCol" title="Add Column"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add Col</button>
+                        <button class="editor-btn danger" id="editorDeleteRows" title="Delete Selected Rows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>Delete Rows</button>
+                    </div>
+                    <div class="editor-toolbar-group">
+                        <button class="editor-btn" id="editorUndo" title="Undo (Ctrl+Z)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Undo</button>
+                        <button class="editor-btn" id="editorRedo" title="Redo (Ctrl+Y)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.13-9.36L23 10"/></svg>Redo</button>
+                    </div>
+                    <div class="editor-toolbar-group">
+                        <button class="editor-btn" id="editorFindReplace" title="Find & Replace (Ctrl+F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Find &amp; Replace</button>
+                        <button class="editor-btn" id="editorSort" title="Sort by column"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/></svg>Sort</button>
+                        <button class="editor-btn" id="editorFilter" title="Filter rows"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>Filter</button>
+                    </div>
+                    <div class="editor-toolbar-group">
+                        <button class="editor-btn" id="editorDownloadCSV" title="Download CSV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>CSV</button>
+                        <button class="editor-btn" id="editorDownloadXLSX" title="Download XLSX"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>XLSX</button>
+                    </div>
+                </div>
+
+                <!-- Find & Replace Bar (hidden by default) -->
+                <div class="editor-find-bar" id="editorFindBar" style="display:none;">
+                    <input class="editor-find-input" id="editorFindInput" placeholder="Find...">
+                    <input class="editor-find-input" id="editorReplaceInput" placeholder="Replace with...">
+                    <button class="editor-btn" id="editorReplaceBtn">Replace All</button>
+                    <button class="editor-btn" id="editorCloseFindBar">✕</button>
+                    <span class="editor-find-count" id="editorFindCount"></span>
+                </div>
+
+                <!-- Sort / Filter Controls -->
+                <div class="editor-controls-bar" id="editorControlsBar" style="display:none;">
+                    <select class="filter-select" id="editorSortCol"><option value="">Sort by column...</option></select>
+                    <button class="editor-btn" id="editorSortAsc">↑ Asc</button>
+                    <button class="editor-btn" id="editorSortDesc">↓ Desc</button>
+                    <span style="color:#CDD3E0">|</span>
+                    <select class="filter-select" id="editorFilterCol"><option value="">Filter column...</option></select>
+                    <select class="filter-select" id="editorFilterOp"><option value="contains">contains</option><option value="equals">equals</option><option value="gt">&gt;</option><option value="lt">&lt;</option><option value="empty">is empty</option><option value="notempty">is not empty</option></select>
+                    <input class="editor-find-input" id="editorFilterVal" placeholder="Value...">
+                    <button class="editor-btn" id="editorApplyFilter">Apply</button>
+                    <button class="editor-btn danger" id="editorClearFilter">Clear Filter</button>
+                </div>
+
+                <!-- Cleaning Quick Actions -->
+                <div class="editor-clean-bar">
+                    <span class="editor-clean-label">Quick Clean:</span>
+                    <button class="editor-clean-btn" id="editorRemoveDupes" title="Remove duplicate rows">🔁 Remove Duplicates</button>
+                    <button class="editor-clean-btn" id="editorFillEmpty" title="Fill empty cells">⬜ Fill Empty Cells</button>
+                    <button class="editor-clean-btn" id="editorTrimSpaces" title="Trim whitespace">✂️ Trim Whitespace</button>
+                    <span class="editor-status" id="editorStatus"></span>
+                </div>
+
+                <!-- Editable Table -->
+                <div class="editor-table-wrap" id="editorTableWrap">
+                    <div class="editor-empty" id="editorEmpty">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#CDD3E0" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>
+                        <p>Upload a data file first, then come here to edit it</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen Chart Modal -->
+    <div class="fullscreen-modal" id="fullscreenModal" style="display:none;">
+        <div class="fullscreen-modal-inner">
+            <div class="fullscreen-modal-header">
+                <span class="fullscreen-modal-title" id="fullscreenTitle">Chart</span>
+                <button class="modal-close" id="closeFullscreen">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="fullscreen-chart-wrap">
+                <canvas id="fullscreenCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- LLM API Key Modal -->
+    <div class="modal-overlay" id="apiKeyModal" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>LLM API Configuration</h3>
+                <button class="modal-close" id="closeApiModal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:0.8125rem;color:#6B7280;margin-bottom:16px;">Connect an LLM for advanced AI-powered analysis. Without an API key, the chat uses built-in local analysis.</p>
+                <label class="modal-label">Provider</label>
+                <select class="modal-select" id="llmProviderSelect">
+                    <option value="groq">Groq (Free — Llama 3.3 70B)</option>
+                    <option value="gemini">Google Gemini (Gemini 2.0 Flash)</option>
+                    <option value="openai">OpenAI (GPT-4o Mini)</option>
+                </select>
+                <label class="modal-label" style="margin-top:14px;">API Key</label>
+                <input type="password" class="modal-input" id="apiKeyInput" placeholder="Paste your API key here...">
+                <p style="font-size:0.6875rem;color:#9BA3B5;margin-top:8px;">🔒 Key is stored locally in your browser. Never sent anywhere except the selected provider.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveApiKey" style="padding:10px 24px;font-size:0.8125rem;">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+    <!-- Sheet Data Viewer Modal -->
+    <div class="sheet-viewer-overlay" id="sheetViewer" style="display:none;">
+        <div class="sheet-viewer">
+            <div class="sheet-viewer-header">
+                <div class="sheet-viewer-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span id="sheetViewerFileName">data.csv</span>
+                    <span class="sheet-row-badge" id="sheetRowBadge">0 rows</span>
+                </div>
+                <div class="sheet-viewer-actions">
+                    <div class="sheet-search-wrapper">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" class="sheet-search" id="sheetSearch" placeholder="Search data...">
+                    </div>
+                    <button class="sheet-close-btn" id="closeSheetViewer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="sheet-viewer-body" id="sheetViewerBody">
+                <!-- Table rendered by JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

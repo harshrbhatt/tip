@@ -1,0 +1,27 @@
+{
+  "name": "tip-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Telecom Intelligence Platform - Advanced Data Analytics Dashboard",
+  "author": "Harsh Bhatt",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src/**/*.js",
+    "format": "prettier --write \"src/**/*.{js,css,html}\"",
+    "prepare": "husky install || true"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "vite": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
